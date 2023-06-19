@@ -15,7 +15,7 @@ begin
   try
     csv := TCSVRecord.Create;
     csv.IgnoreWhiteSpaces := true;
-    csv.IgnoreFieldDelimiterAtEndOfLine := true;
+    csv.IgnoreFieldSeparatorAtEndOfLine := true;
     csv.FieldSeparator := ';';
 
     WriteLn('## Input, relaxed rules, separator = ;');

@@ -11,13 +11,10 @@ uses
 
 var
   strm: TStringStream;
-  reader: TStreamReader;
   csv: TCSVRecord;
   text: string;
-  c: integer;
 
 begin
-  c := 0;
   text := '# commentary' + sLineBreak + 'a,b,c' + sLineBreak + sLineBreak
     + 'c,b,a';
   WriteLn('## Take note of CSV test case:');

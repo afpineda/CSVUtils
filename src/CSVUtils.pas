@@ -40,7 +40,7 @@ type
     FFieldSeparator: char;
     FFieldEnclosure: char;
     FIgnoreWhiteSpaces: boolean;
-    FIgnoreFDAtEOL: boolean;
+    FIgnoreFSAtEOL: boolean;
     FMaxRecordLength: integer;
     FForceFieldCount: integer;
     FIgnoreEmptyLines: boolean;
@@ -87,8 +87,8 @@ type
       write FFormatSettings;
     property IgnoreEmptyLines: boolean read FIgnoreEmptyLines
       write FIgnoreEmptyLines;
-    property IgnoreFieldDelimiterAtEndOfLine: boolean read FIgnoreFDAtEOL
-      write FIgnoreFDAtEOL;
+    property IgnoreFieldSeparatorAtEndOfLine: boolean read FIgnoreFSAtEOL
+      write FIgnoreFSAtEOL;
     property IgnoreWhiteSpaces: boolean read FIgnoreWhiteSpaces
       write FIgnoreWhiteSpaces;
     property MaxRecordLength: integer read FMaxRecordLength
@@ -122,7 +122,7 @@ procedure TCSVRecord.UseRFC4180;
 begin
   FFieldSeparator := ',';
   FFieldEnclosure := '"';
-  FIgnoreFDAtEOL := false;
+  FIgnoreFSAtEOL := false;
   FIgnoreWhiteSpaces := false;
   FIgnoreEmptyLines := false;
   FCommentaryChar := #0;
@@ -142,7 +142,7 @@ begin
     FFieldSeparator := source.FFieldSeparator;
     FFieldEnclosure := source.FFieldEnclosure;
     FIgnoreWhiteSpaces := source.FIgnoreWhiteSpaces;
-    FIgnoreFDAtEOL := source.FIgnoreFDAtEOL;
+    FIgnoreFSAtEOL := source.FIgnoreFSAtEOL;
     FMaxRecordLength := source.FMaxRecordLength;
     FForceFieldCount := source.FForceFieldCount;
     FIgnoreEmptyLines := source.FIgnoreEmptyLines;
@@ -344,7 +344,7 @@ begin
     SetLength(FFields, fCount);
     FFields[fCount - 1] := field;
   end;
-  if (not FIgnoreFDAtEOL) and separatorFound then
+  if (not FIgnoreFSAtEOL) and separatorFound then
   begin
     inc(fCount);
     SetLength(FFields, fCount);
@@ -530,7 +530,7 @@ begin
         Result := Result + FFieldSeparator;
       Result := Result + FFieldEnclosure + FFieldEnclosure;
     end;
-  if (FIgnoreFDAtEOL) then
+  if (FIgnoreFSAtEOL) then
     Result := Result + FFieldSeparator;
 end;
 

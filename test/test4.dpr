@@ -117,7 +117,7 @@ begin
     csv.FieldSeparator := ';';
     csv.FieldEnclosure := '=';
     csv.IgnoreWhiteSpaces := true;
-    csv.IgnoreFieldDelimiterAtEndOfLine := true;
+    csv.IgnoreFieldSeparatorAtEndOfLine := true;
 
     WriteLn('-- separator, enclosure, white spaces, separator at EOL');
     assert('record', csv.AsText, 'a;b;c;=1 or 2=;=2+2==4=;');

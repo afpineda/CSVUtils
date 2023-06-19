@@ -11,6 +11,7 @@ A small object-pascal library for [CSV](https://en.wikipedia.org/wiki/Comma-sepa
 - Ignoring white spaces around fields (optional)
 - Line breaks inside a field
 - Ignoring empty lines (optional)
+- Ignoring commented lines (optional)
 - Variable field count on each record (optional)
 - Fixed field count for all records (optional)
 - Any field data type ([variant](https://wiki.freepascal.org/Variant))
@@ -139,7 +140,7 @@ These properties will determine the behavior of future calls to `TCSVRecord.Read
   When *true*, `TCSVRecord.Read()` will ignore empty lines and move to the next record. `TCSVRecord.Write()` will not output empty lines from empty records.
   When *false*, an empty line will cause an empty record. This property does not apply to `TCSVRecord.AsText`.
 
-- `TCSVRecord.IgnoreFieldDelimiterAtEndOfLine`: by default, false.
+- `TCSVRecord.IgnoreFieldSeparatorAtEndOfLine`: by default, false.
 
   - At reading:
 

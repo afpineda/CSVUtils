@@ -11,13 +11,10 @@ uses
 
 var
   strm: TStringStream;
-  reader: TStreamReader;
   csv: TCSVRecord;
   text: string;
-  c: integer;
 
 begin
-  c := 0;
   text := 'a,b' + sLineBreak + '1234567890,0987654321';
   WriteLn('## Test of MaxRecordLength');
   WriteLn('## Take note of CSV test case:');

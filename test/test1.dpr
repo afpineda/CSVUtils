@@ -28,7 +28,7 @@ begin
     assert('IgnoreEmptyLines', csv.IgnoreEmptyLines, false);
     assert('IgnoreWhiteSpaces', csv.IgnoreWhiteSpaces, false);
     assert('IgnoreFieldDelimiterAtEndOfLine',
-      csv.IgnoreFieldDelimiterAtEndOfLine, false);
+      csv.IgnoreFieldSeparatorAtEndOfLine, false);
 
     WriteLn('-- Parse valid text line, 3 fields, unquoted');
     csv.AsText := 'a,b, c ';
