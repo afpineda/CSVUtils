@@ -108,7 +108,7 @@ These properties allows access to record data and meta-data.
   A CSV-formatted representation of the current record. Both for reading and writing. `TCSVRecord.FormatSettings` applies. Use this property to parse or
   generate CSV text for other objects rather than streams.
 
-### Methods
+### Public methods
 
 - `TCSVRecord.Assign(const source: TCSVRecord)`: copy source to this instance.
 - `TCSVRecord.Clear`: clear current data and start with a new fresh empty record.
@@ -116,6 +116,10 @@ These properties allows access to record data and meta-data.
 - `TCSVRecord.Read(const from: TStreamReader)`: read a CSV record from the given stream. Return value is *false* at end of stream, *true* otherwise.
 - `TCSVRecord.UseRFC4180`: force RFC 4180 syntax rules. A shortcut to other "global" properties.
 - `TCSVRecord.Write(const to: TStreamWriter)`: write the current record as CSV-formatted text to the given stream.
+- `TCSVRecord.FieldToString(const source: Variant)`: used to cast any variant type to string.
+  `TCSVRecord.FormatSettings` drives the conversion of  `TDateTime` and `Extendended` to string.
+  [`VarToStr`](https://www.freepascal.org/docs-html/rtl/variants/vartostr.html) is used for other types.
+  Derive a new class and override this method to provide your own conversion. Since this method is public, you may use it for other purposes.
 
 ### Global properties
 
