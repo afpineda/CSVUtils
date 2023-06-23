@@ -30,7 +30,7 @@ type
   ECSVSyntaxError = class(Exception);
   ECSVWrongFieldEnclosing = class(ECSVSyntaxError);
   ECSVMaxRecordLength = class(ECSVSyntaxError);
-  ECSVCharNotAllowed = class(ECSVSyntaxError);
+  ECSVCharNotAllowed = class(Exception);
 
 type
 

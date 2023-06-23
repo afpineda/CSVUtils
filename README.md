@@ -187,5 +187,5 @@ These properties will determine the behavior of future calls to `TCSVRecord.Read
 - `ECSVSyntaxError`: any syntax-related error at parsing.
   - `ECSVWrongFieldEnclosing`: any incorrect enclosing of a field due to non-terminating quotes, incorrectly escaped quotes, or text outside of the enclosing.
   - `ECSVMaxRecordLength`: maximum record length was exceeded at `TCSVRecord.Read()`.
-  - `ECSVCharNotAllowed`: syntax rules does not allow a certain character as field separator, field enclosure or commentary.
-    In particular, the same character is not allowed for two of those properties.
+- `ECSVCharNotAllowed`: syntax rules does not allow a certain character as field separator, field enclosure or commentary.
+  In particular, the same character is not allowed for two of those properties.
