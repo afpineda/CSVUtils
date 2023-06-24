@@ -32,7 +32,7 @@ By default, RFC 4180 syntax rules apply.
 
 - **Reading**:
 
-  Text data can be read from any `TStreamReader` object by the means of `TCSVRecord.Read()`. Any concern about character encoding or line breaks should be handled at `TSreamReader`. Alternatively, text data can be parsed from a single string by writing to `TCSVRecord.AsText`. In the later case, a single record is expected. For example:
+  Text data can be read from any `TStreamReader` object by the means of `TCSVRecord.Read()`. Any concern about character encoding or line breaks should be handled at `TSreamReader`. Alternatively, text data can be parsed from a single string by writing to `TCSVRecord.AsText`. In the later case, a single record is expected. Example:
 
   ```pascal
   csv := TCSVRecord.Create;
@@ -51,7 +51,7 @@ By default, RFC 4180 syntax rules apply.
 - **Writing**:
 
   Call `TCSVRecord.Clear` to start with an empty record. Then, write `TCSVRecord.FieldCount` to set a number of fields. Then, write data to the `TCSVRecord.Field[]` array. Since this array is of type [Variant](https://wiki.freepascal.org/Variant), any variant-compatible data type will be accepted. Such data will be converted to
-  CSV text when reading `TCSVRecord.AsText` or calling `TCSVRecord.Write()`. Some "global" properties may affect how CSV text is generated. For example:
+  CSV text when reading `TCSVRecord.AsText` or calling `TCSVRecord.Write()`. Some "global" properties may affect how CSV text is generated. Example:
 
   ```pascal
   csv := TCSVRecord.Create;
@@ -189,3 +189,10 @@ These properties will determine the behavior of future calls to `TCSVRecord.Read
   - `ECSVMaxRecordLength`: maximum record length was exceeded at `TCSVRecord.Read()`.
 - `ECSVCharNotAllowed`: syntax rules does not allow a certain character as field separator, field enclosure or commentary.
   In particular, the same character is not allowed for two of those properties.
+
+### Protected methods
+
+- `TCSVRecord.OnCommentaryLine(const text: string)`: may be called when parsing CSV text.
+
+  Override this method to provide custom processing of commentary lines. Will never be called if `TCSVRecord.CommentaryChar` is `#0`.
+  Otherwise, will be called on each commentary line (if any). `text` includes the leading commentary character. Default implementation does nothing.

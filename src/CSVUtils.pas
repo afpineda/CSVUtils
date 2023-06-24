@@ -60,6 +60,8 @@ type
     procedure SetFieldEnclosure(const value: char);
     procedure SetFieldSeparator(const value: char);
     procedure SetTextLine(const text: string);
+  protected
+    procedure OnCommentaryLine(const text: string); virtual;
   public
     function FieldToString(const source: Variant): string; virtual;
   public
@@ -117,6 +119,11 @@ end;
 // ----------------------------------------------------------------------------
 // Methods
 // ----------------------------------------------------------------------------
+
+procedure TCSVRecord.OnCommentaryLine(const text: string);
+begin
+  // do nothing
+end;
 
 procedure TCSVRecord.UseRFC4180;
 begin
@@ -328,6 +335,7 @@ var
   separatorFound: boolean;
   enclosureFound: boolean;
 begin
+  // Initialize
   SetLength(FFields, 0);
   fCount := 0;
   idx := 1;
@@ -335,8 +343,12 @@ begin
   // Ignore commentary lines (if any)
   if (FCommentaryChar <> #0) and (textLength > 0) and
     (textLine[1] = CommentaryChar) then
+  begin
+    OnCommentaryLine(textLine);
     Exit;
+  end;
 
+  // Parse
   while (idx <= textLength) do
   begin
     ParseSingleField(idx, field, separatorFound, enclosureFound);
