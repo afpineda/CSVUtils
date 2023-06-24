@@ -83,8 +83,7 @@ These properties allows access to record data and meta-data.
 
 - `TCSVRecord.Field[]`:
 
-  Read or write a single field. Index is in the range from 0 to `TCSVRecord.FieldCount` - 1. At reading, there is **no typecast attempt**, so data is retrieved as
-  a *string* (when parsing) or as previously written.
+  Read or write a single field. Index is in the range from 0 to `TCSVRecord.FieldCount` - 1. At reading, there is **no typecast attempt** by default, so data is retrieved as a *string* (when parsing) or as previously written. This behaviour may change by overriding `TCSVRecord.StringToField`.
   The reason is that CSV text could have been written in a computer with different **regional settings** than the current computer, causing a wrong typecast.
   This way, you have a chance to apply your own typecasting.
   Use one of the `TCSVRecord.FieldAs*[]` properties for typecasting using `TCSVRecord.FormatSettings`.
@@ -116,10 +115,6 @@ These properties allows access to record data and meta-data.
 - `TCSVRecord.Read(const from: TStreamReader)`: read a CSV record from the given stream. Return value is *false* at end of stream, *true* otherwise.
 - `TCSVRecord.UseRFC4180`: force RFC 4180 syntax rules. A shortcut to other "global" properties.
 - `TCSVRecord.Write(const to: TStreamWriter)`: write the current record as CSV-formatted text to the given stream.
-- `TCSVRecord.FieldToString(const source: Variant)`: used to cast any variant type to string.
-  `TCSVRecord.FormatSettings` drives the conversion of  `TDateTime` and `Extendended` to string.
-  [`VarToStr`](https://www.freepascal.org/docs-html/rtl/variants/vartostr.html) is used for other types.
-  Derive a new class and override this method to provide your own conversion. Since this method is public, you may use it for other purposes.
 
 ### Global properties
 
@@ -196,3 +191,18 @@ These properties will determine the behavior of future calls to `TCSVRecord.Read
 
   Override this method to provide custom processing of commentary lines. Will never be called if `TCSVRecord.CommentaryChar` is `#0`.
   Otherwise, will be called on each commentary line (if any). `text` includes the leading commentary character. Default implementation does nothing.
+
+- `TCSVRecord.StringToField(const fieldIndex: integer; const fieldText: string, const enclosed: boolean)`: called to parse a field (as text) into a variant type.
+
+  By default, this method returns the source string "as is". Derive a new class and override this method to parse specific or custom data types.
+  You should know (or guess) which data type applies to each field (or "column") in advance,
+  which is not part of the CSV specification. `enclosed` is *true* if the given field was enclosed in quotation marks, *false* otherwise.
+  This information may be useful. For example, you may cast *1033* into an integer variant, but *"1033"* into a string.
+  Gets called when parsing CSV text at `TCSVRecord.Read` or `TCSVRecord.AsText := ...`.
+
+- `TCSVRecord.FieldToString(const fieldIndex: integer; const field: Variant)`: used to cast any variant type to string.
+
+  By default, `TCSVRecord.FormatSettings` drives the conversion of  `TDateTime` and `Extendended` to string.
+  [`VarToStr`](https://www.freepascal.org/docs-html/rtl/variants/vartostr.html) is used for other types.
+  This method gets called when converting data to CSV text (`TCSVRecord.Write` or `... := TCSVRecord.AsText`) and at `TCSVRecord.FieldAsString[]`.
+  Derive a new class and override this method to provide your own conversion.

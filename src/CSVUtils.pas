@@ -61,9 +61,11 @@ type
     procedure SetFieldSeparator(const value: char);
     procedure SetTextLine(const text: string);
   protected
+    function FieldToString(const fieldIndex: integer; const field: Variant)
+      : string; virtual;
     procedure OnCommentaryLine(const text: string); virtual;
-  public
-    function FieldToString(const source: Variant): string; virtual;
+    function StringToField(const fieldIndex: integer; const fieldText: string;
+      const enclosed: boolean): Variant; virtual;
   public
     constructor Create;
 
@@ -176,6 +178,27 @@ begin
   if (Assigned(proc)) then
     for I := 0 to FieldCount - 1 do
       proc(field[I], I);
+end;
+
+// ----------------------------------------------------------------------------
+// Type parsing and conversion
+// ----------------------------------------------------------------------------
+
+function TCSVRecord.FieldToString(const fieldIndex: integer;
+  const field: Variant): string;
+begin
+  if (VarIsType(field, varDate)) then
+    Result := DateTimeToStr(TVarData(field).VDate, FFormatSettings)
+  else if (VarIsFloat(field)) then
+    Result := FloatToStr(field, FFormatSettings)
+  else
+    Result := VarToStr(field);
+end;
+
+function TCSVRecord.StringToField(const fieldIndex: integer;
+  const fieldText: string; const enclosed: boolean): Variant;
+begin
+  Result := fieldText;
 end;
 
 // ----------------------------------------------------------------------------
@@ -354,7 +377,7 @@ begin
     ParseSingleField(idx, field, separatorFound, enclosureFound);
     inc(fCount);
     SetLength(FFields, fCount);
-    FFields[fCount - 1] := field;
+    FFields[fCount - 1] := StringToField(fCount - 1, field, enclosureFound);
   end;
   if (not FIgnoreFSAtEOL) and separatorFound then
   begin
@@ -474,17 +497,7 @@ end;
 
 function TCSVRecord.GetFieldAsString(index: integer): string;
 begin
-  Result := FieldToString(GetField(index));
-end;
-
-function TCSVRecord.FieldToString(const source: Variant): string;
-begin
-  if (VarIsType(source, varDate)) then
-    Result := DateTimeToStr(TVarData(source).VDate, FFormatSettings)
-  else if (VarIsFloat(source)) then
-    Result := FloatToStr(source, FFormatSettings)
-  else
-    Result := VarToStr(source);
+  Result := FieldToString(index, GetField(index));
 end;
 
 // ----------------------------------------------------------------------------
@@ -498,11 +511,11 @@ end;
 
 function TCSVRecord.GetTextLine: string;
 
-  function FieldToStr(field: Variant): string;
+  function FieldEnclosure(const index: integer; const field: Variant): string;
   var
     enclose: boolean;
   begin
-    Result := FieldToString(field);
+    Result := FieldToString(index, field);
     if (FIgnoreWhiteSpaces) then
       Result := Trim(Result);
 
@@ -532,7 +545,7 @@ begin
   begin
     if (I > 0) then
       Result := Result + FFieldSeparator;
-    Result := Result + FieldToStr(FFields[I]);
+    Result := Result + FieldEnclosure(I, FFields[I]);
   end;
   count := high(FFields) + 1;
   if (FForceFieldCount > 0) and (FForceFieldCount > count) then

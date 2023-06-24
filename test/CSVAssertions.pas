@@ -54,6 +54,7 @@ procedure dump(strm: TStream; csv: TCSVRecord);
 var
   reader: TStreamReader;
   c: cardinal;
+  index: integer;
 begin
   c := 0;
   strm.Seek(0, soBeginning);
@@ -64,12 +65,11 @@ begin
       inc(c);
       Write(c);
       Write(' | ');
-      csv.ForEach(
-        procedure(field: Variant; index: integer)
-        begin
-          Write(csv.FieldToString(field));
-          Write(' | ');
-        end);
+      for index := 0 to csv.FieldCount - 1 do
+      begin
+        Write(csv.FieldAsString[index]);
+        Write(' | ');
+      end;
       WriteLn;
     end;
     WriteLn('----------------------------');
