@@ -102,8 +102,8 @@ type
 implementation
 
 uses
-  Variants,
-  StrUtils;
+  System.Variants,
+  System.StrUtils;
 
 // ----------------------------------------------------------------------------
 // Constructor / destructor
@@ -187,12 +187,38 @@ end;
 function TCSVRecord.FieldToString(const fieldIndex: integer;
   const field: Variant): string;
 begin
-  if (VarIsType(field, varDate)) then
-    Result := DateTimeToStr(TVarData(field).VDate, FFormatSettings)
-  else if (VarIsFloat(field)) then
-    Result := FloatToStr(field, FFormatSettings)
+  // if (VarIsType(field, varDate)) then
+  // Result := DateTimeToStr(TVarData(field).VDate, FFormatSettings)
+  // else if (VarIsFloat(field)) then
+  // Result := FloatToStr(field, FFormatSettings)
+  // else
+  // Result := VarToStr(field);
+  case varType(field) of
+    varBoolean:
+      Result := BoolToStr(field, false);
+    varDate:
+      Result := DateTimeToStr(TVarData(field).VDate, FFormatSettings);
+    varSingle, varDouble:
+      Result := FloatToStr(field, FFormatSettings);
+    varCurrency:
+      Result := CurrToStr(field, FormatSettings);
+    varShortInt, varByte:
+      Result := Format('%d', [byte(field)], FormatSettings);
+    varSmallInt:
+      Result := Format('%d', [Int16(field)], FormatSettings);
+    varInteger:
+      Result := Format('%d', [integer(field)], FormatSettings);
+    varInt64:
+      Result := Format('%d', [Int64(field)], FormatSettings);
+    varWord:
+      Result := Format('%u', [UInt16(field)], FormatSettings);
+    varUInt32:
+      Result := Format('%u', [UInt32(field)], FormatSettings);
+    varUInt64:
+      Result := Format('%u', [UInt64(field)], FormatSettings);
   else
     Result := VarToStr(field);
+  end;
 end;
 
 function TCSVRecord.StringToField(const fieldIndex: integer;
@@ -460,7 +486,7 @@ begin
   else
     Result := FFields[index];
 
-  if (VarType(Result) <> varNull) and (VarToStr(Result) = '') then
+  if (varType(Result) <> varNull) and (VarToStr(Result) = '') then
     Result := Null;
 end;
 
