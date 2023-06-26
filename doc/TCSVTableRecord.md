@@ -17,12 +17,13 @@ csv.FieldDataType[0] := varDate;
 csv.FieldDataType[1] := varUInt64;
 // since not given, csv.FieldDataType[2] := varString;
 
-while (csv.Read(streamReader)) do
 try
-  date := csv.Field[0];
-  number := csv.Field[1];
-  str := csv.Field[2];
-  ...
+  while (csv.Read(streamReader)) do
+  begin
+    date := csv.Field[0];
+    number := csv.Field[1];
+    str := csv.Field[2];
+  end;
 except
    on E:EConvertError do
       // Handle typecast errors here
@@ -30,7 +31,7 @@ except
 end;
 ```
 
-At writting, this class does not differ from its parent.
+At writing, this class does not differ from its parent.
 
 ## Properties
 
@@ -49,9 +50,14 @@ At writting, this class does not differ from its parent.
   | varNull                                | No matter the contents of the field, Null is retrieved                 | "anything"           |
   | varByte / varWord                      | An hexadecimal number. May include *$* or *0X* as prefix               | 0xFF0A               |
   | varDate                                | A date/time (driven by `TFormatSettings.ShortDateFormat`)              | 2023-06-25 16:55:00  |
-  | (Other)                                | A string                                                               | This is text         |
+  | (Other)                                | A string (no format)                                                   | This is text         |
 
   Note that `TCSVRecord.FormatSettings` will drive the exact format of those data types.
+
+## Methods
+
+- `TCSVRecord.Assign(const source: TCSVTableRecord)`: copy source to this instance.
+- `TCSVTableRecord.ClearDataTypes`: remove all field's data types.
 
 ## Exceptions
 

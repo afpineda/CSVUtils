@@ -41,6 +41,8 @@ type
   public
     constructor Create;
     destructor Destroy; override;
+    procedure Assign(source: TCSVTableRecord);
+    procedure ClearDataTypes;
   public
     property FieldDataType[index: Integer]: TVarType read GetFieldDataType
       write SetFieldDataType;
@@ -51,6 +53,10 @@ implementation
 uses
   System.Variants,
   System.StrUtils;
+
+// ----------------------------------------------------------------------------
+// Constructor / destructor
+// ----------------------------------------------------------------------------
 
 constructor TCSVTableRecord.Create;
 begin
@@ -63,6 +69,10 @@ begin
   FFieldDataType.Free;
   inherited;
 end;
+
+// ----------------------------------------------------------------------------
+// Properties
+// ----------------------------------------------------------------------------
 
 function TCSVTableRecord.GetFieldDataType(index: Integer): TVarType;
 begin
@@ -77,6 +87,32 @@ begin
   if (index >= 0) then
     FFieldDataType.AddOrSetValue(index, dataType);
 end;
+
+// ----------------------------------------------------------------------------
+// Public methods
+// ----------------------------------------------------------------------------
+
+procedure TCSVTableRecord.Assign(source: TCSVTableRecord);
+begin
+  inherited Assign(source);
+  if (source <> nil) then
+  begin
+    FFieldDataType.Free;
+    FFieldDataType := TDictionary<Integer, TVarType>.Create
+      (source.FFieldDataType);
+  end
+  else
+    FFieldDataType.Clear;
+end;
+
+procedure TCSVTableRecord.ClearDataTypes;
+begin
+  FFieldDataType.Clear;
+end;
+
+// ----------------------------------------------------------------------------
+// Protected methods
+// ----------------------------------------------------------------------------
 
 function TCSVTableRecord.ClearNumberDecorations(const text: string): string;
 begin
@@ -140,5 +176,7 @@ begin
   else
     Result := inherited;
 end;
+
+// ----------------------------------------------------------------------------
 
 end.

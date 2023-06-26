@@ -19,7 +19,7 @@ A small object-pascal library for [CSV](https://en.wikipedia.org/wiki/Comma-sepa
 
 ## Usage
 
-Copy [CSVUtils.pas](./src/CSVUtils.pas) to your project folder, then add to your Delphi/FreePascal project file. Respect the [license](./LICENSE.md). Nothing else is required.
+Copy [CSVUtils.pas](./src/CSVUtils.pas) and/or [CSVUtils.Table.pas](./src/CSVUtils.Table.pas) to your project folder, then add to your Delphi/FreePascal project file. Respect the [license](./LICENSE.md). Nothing else is required.
 
 Automated test units are found in the [test](./test/TestSuite.groupproj) folder. No external testing library is required.
 

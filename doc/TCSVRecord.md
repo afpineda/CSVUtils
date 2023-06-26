@@ -148,7 +148,7 @@ These properties will determine the behavior of future calls to `TCSVRecord.Read
 
 - `TCSVRecord.FormatSettings`: by default, current locale.
   
-  Custom format settings for data-to-CSV conversion. Applies to date/time and float data, only.
+  Custom format settings for data-to-CSV conversion.
 
 ## Exceptions
 
@@ -196,4 +196,3 @@ uses
 ## See also
 
 - [TCSVTableRecord](TCSVTableRecord.md)
-

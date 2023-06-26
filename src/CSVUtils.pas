@@ -187,12 +187,6 @@ end;
 function TCSVRecord.FieldToString(const fieldIndex: integer;
   const field: Variant): string;
 begin
-  // if (VarIsType(field, varDate)) then
-  // Result := DateTimeToStr(TVarData(field).VDate, FFormatSettings)
-  // else if (VarIsFloat(field)) then
-  // Result := FloatToStr(field, FFormatSettings)
-  // else
-  // Result := VarToStr(field);
   case varType(field) of
     varBoolean:
       Result := BoolToStr(field, false);
@@ -257,7 +251,6 @@ begin
         qCount := textLine.CountChar(FFieldEnclosure);
         enclosingOk := ((qCount mod 2) = 0);
       until (from.EndOfStream) or (enclosingOk);
-      // l := Length(textLine);
       mustIgnore := ((FIgnoreEmptyLines) and (l = 0)) or
         ((FCommentaryChar <> #0) and (l > 0) and
         (textLine[1] = FCommentaryChar));
@@ -584,5 +577,7 @@ begin
   if (FIgnoreFSAtEOL) then
     Result := Result + FFieldSeparator;
 end;
+
+// ----------------------------------------------------------------------------
 
 end.
