@@ -28,7 +28,6 @@ begin
     fs.ThousandSeparator := '.';
     fs.DecimalSeparator := ',';
     fs.DateSeparator := '-';
-    fs.LongDateFormat := 'yyyy-mm-dd hh:nn:ss';
     fs.ShortDateFormat := 'yyyy-mm-dd';
     csv.FormatSettings := fs;
 
