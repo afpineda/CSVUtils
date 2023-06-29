@@ -52,7 +52,7 @@ These properties allows access to record data and meta-data.
 
 - `TCSVRecord.FieldCount`:
 
-  The number of fields (or "columns") in the current record. If `TCSVRecord.ForceFieldCount` is greater than zero, this field has a fixed value and any attempt to write a different value will raise `EArgumentException`. Otherwise, any positive value can be set. Existing fields will be respected. Non-existing fields will be initialized to `Null`.
+  The number of fields (or "columns") in the current record. If `TCSVRecord.ForceFieldCount` is greater than zero, this property has a fixed value and any attempt to write a different value will raise `EArgumentException`. Otherwise, any positive value can be set. Existing fields will be respected. Non-existing fields will be initialized to `Null`.
 
 - `TCSVRecord.Field[]`:
 
