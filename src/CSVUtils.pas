@@ -48,8 +48,14 @@ type
     FCommentaryChar: char;
   private
     function GetField(index: integer): Variant;
+    function GetFieldAsBoolean(index: integer): boolean;
+    function GetFieldAsCardinal(index: integer): cardinal;
+    function GetFieldAsCurrency(index: integer): Currency;
     function GetFieldAsDateTime(index: integer): TDateTime;
     function GetFieldAsFloat(index: integer): Extended;
+    function GetFieldAsInt64(index: integer): Int64;
+    function GetFieldAsInteger(index: integer): integer;
+    function GetFieldAsUInt64(index: integer): UInt64;
     function GetFieldAsString(index: integer): string;
     function GetFieldCount: integer;
     function GetTextLine: string;
@@ -61,9 +67,11 @@ type
     procedure SetFieldSeparator(const value: char);
     procedure SetTextLine(const text: string);
   protected
+    function ClearCurrencyDecorations(const text: string): string;
     function FieldToString(const fieldIndex: integer; const field: Variant)
       : string; virtual;
     procedure OnCommentaryLine(const text: string); virtual;
+    function RemoveThousandSeparator(const text: string): string;
     function StringToField(const fieldIndex: integer; const fieldText: string;
       const enclosed: boolean): Variant; virtual;
   public
@@ -79,9 +87,15 @@ type
     property AsText: string read GetTextLine write SetTextLine;
     property CommentaryChar: char read FCommentaryChar write SetCommentaryChar;
     property field[index: integer]: Variant read GetField write SetField;
+    property FieldAsBoolean[index: integer]: boolean read GetFieldAsBoolean;
+    property FieldAsCardinal[index: integer]: cardinal read GetFieldAsCardinal;
+    property FieldAsCurrency[index: integer]: Currency read GetFieldAsCurrency;
     property FieldAsDateTime[index: integer]: TDateTime read GetFieldAsDateTime;
     property FieldAsFloat[index: integer]: Extended read GetFieldAsFloat;
+    property FieldAsInt64[index: integer]: Int64 read GetFieldAsInt64;
+    property FieldAsInteger[index: integer]: integer read GetFieldAsInteger;
     property FieldAsString[index: integer]: string read GetFieldAsString;
+    property FieldAsUInt64[index: integer]: UInt64 read GetFieldAsUInt64;
     property FieldCount: integer read GetFieldCount write SetFieldCount;
     property FieldEnclosure: char read FFieldEnclosure write SetFieldEnclosure;
     property FieldSeparator: char read FFieldSeparator write SetFieldSeparator;
@@ -220,6 +234,19 @@ function TCSVRecord.StringToField(const fieldIndex: integer;
 begin
   Result := fieldText;
 end;
+
+function TCSVRecord.RemoveThousandSeparator(const text: string): string;
+begin
+  Result := ReplaceText(text, FormatSettings.ThousandSeparator, '');
+end;
+
+function TCSVRecord.ClearCurrencyDecorations(const text: string): string;
+begin
+  Result := ReplaceText(text, FormatSettings.ThousandSeparator, '');
+  Result := ReplaceText(Result, FormatSettings.CurrencyString, '');
+  Result := Trim(Result);
+end;
+
 
 // ----------------------------------------------------------------------------
 // Read/write from/to stream
@@ -504,19 +531,51 @@ begin
   end;
 end;
 
+function TCSVRecord.GetFieldAsBoolean(index: integer): boolean;
+begin
+  Result := StrToBool(VarToStr(field[index]));
+end;
+
+function TCSVRecord.GetFieldAsCardinal(index: integer): cardinal;
+begin
+  Result := StrToUInt(RemoveThousandSeparator(VarToStr(field[index])));
+end;
+
+function TCSVRecord.GetFieldAsCurrency(index: integer): Currency;
+begin
+  Result := StrToCurr(ClearCurrencyDecorations(VarToStr(field[index])),
+    FFormatSettings);
+end;
+
 function TCSVRecord.GetFieldAsDateTime(index: integer): TDateTime;
 begin
-  Result := StrToDateTime(VarToStr(GetField(index)), FFormatSettings);
+  Result := StrToDateTime(VarToStr(field[index]), FFormatSettings);
 end;
 
 function TCSVRecord.GetFieldAsFloat(index: integer): Extended;
 begin
-  Result := StrToFloat(VarToStr(GetField(index)), FFormatSettings);
+  Result := StrToFloat(RemoveThousandSeparator(VarToStr(field[index])),
+    FFormatSettings);
+end;
+
+function TCSVRecord.GetFieldAsInt64(index: integer): Int64;
+begin
+  Result := StrToInt64(RemoveThousandSeparator(VarToStr(field[index])));
+end;
+
+function TCSVRecord.GetFieldAsInteger(index: integer): integer;
+begin
+  Result := StrToInt(RemoveThousandSeparator(VarToStr(field[index])));
 end;
 
 function TCSVRecord.GetFieldAsString(index: integer): string;
 begin
   Result := FieldToString(index, GetField(index));
+end;
+
+function TCSVRecord.GetFieldAsUInt64(index: integer): UInt64;
+begin
+  Result := StrToUInt64(RemoveThousandSeparator(VarToStr(field[index])));
 end;
 
 // ----------------------------------------------------------------------------

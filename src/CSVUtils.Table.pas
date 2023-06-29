@@ -33,8 +33,6 @@ type
     function GetFieldDataType(index: Integer): TVarType;
     procedure SetFieldDataType(index: Integer; dataType: TVarType);
   protected
-    function ClearNumberDecorations(const text: string): string;
-    function ClearCurrencyDecorations(const text: string): string;
     function ClearHexPrefix(const text: string): string;
     function StringToField(const fieldIndex: Integer; const fieldText: string;
       const enclosed: boolean): Variant; override;
@@ -114,19 +112,6 @@ end;
 // Protected methods
 // ----------------------------------------------------------------------------
 
-function TCSVTableRecord.ClearNumberDecorations(const text: string): string;
-begin
-  Result := ReplaceText(text, FormatSettings.ThousandSeparator, '');
-  Result := ReplaceText(Result, FormatSettings.DecimalSeparator, '.');
-end;
-
-function TCSVTableRecord.ClearCurrencyDecorations(const text: string): string;
-begin
-  Result := ReplaceText(text, FormatSettings.ThousandSeparator, '');
-  Result := ReplaceText(Result, FormatSettings.CurrencyString, '');
-  Result := ReplaceText(Result, ' ', '');
-end;
-
 function TCSVTableRecord.ClearHexPrefix(const text: string): string;
 begin
   if (text.StartsWith('0x')) then
@@ -154,17 +139,17 @@ begin
           FormatSettings);
       varSingle, varDouble:
         begin
-          aux := ReplaceText(fieldText, FormatSettings.ThousandSeparator, '');
+          aux := RemoveThousandSeparator(fieldText);
           Result := StrToFloat(aux, FormatSettings);
         end;
       varSmallInt, varShortInt, varInteger:
-        Result := StrToInt(ClearNumberDecorations(fieldText));
+        Result := StrToInt(RemoveThousandSeparator(fieldText));
       varInt64:
-        Result := StrToInt64(ClearNumberDecorations(fieldText));
+        Result := StrToInt64(RemoveThousandSeparator(fieldText));
       varUInt32:
-        Result := StrToUInt(ClearNumberDecorations(fieldText));
+        Result := StrToUInt(RemoveThousandSeparator(fieldText));
       varUInt64:
-        Result := StrToUInt64(ClearNumberDecorations(fieldText));
+        Result := StrToUInt64(RemoveThousandSeparator(fieldText));
       varNull:
         Result := Null;
       varByte, varWord:

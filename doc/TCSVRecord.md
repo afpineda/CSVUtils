@@ -63,17 +63,26 @@ These properties allows access to record data and meta-data.
 
 - `TCSVRecord.FieldAsString[]`:
 
-  The same as `TCSVRecord.Field[]` but data will be forcedly casted to *string* type using `TCSVRecord.FormatSettings`.
-  Read-only. Note that `Null` values will be converted to empty strings by default.
+  The same as `TCSVRecord.Field[]` but data will be forcedly casted to *string* using `TCSVRecord.fieldToString`.
+  Read-only. Note that, `Null` values will be converted to empty strings by default.
 
 - `TCSVRecord.FieldAsDateTime[]`:
 
   The same as `TCSVRecord.Field[]` but data will be forcedly casted to [TDateTime](https://wiki.freepascal.org/TDateTime) using `TCSVRecord.FormatSettings`. Read-only. May raise an exception.  
 
-- `TCSVRecord.FieldAsFloat[]`:
+- `TCSVRecord.FieldAsBoolean[]`:
+
+  The same as `TCSVRecord.Field[]` but data will be forcedly casted to `boolean` using the conversion rules of [StrToBool](https://www.freepascal.org/docs-html/rtl/sysutils/strtobool.html). Read-only. May raise an exception.
+
+- `TCSVRecord.FieldAsFloat[]` and `TCSVRecord.FieldAsCurrency[]`:
 
   The same as `TCSVRecord.Field[]` but data will be forcedly casted to [Extended](https://wiki.freepascal.org/IEEE_754_formats#extended) using
-  `TCSVRecord.FormatSettings`. Read-only. May raise an exception.
+  `TCSVRecord.FormatSettings`. Thousand separators and currency signs (if applies) are ignored. Read-only. May raise an exception.
+
+- `TCSVRecord.FieldAsInteger[]`, `TCSVRecord.FieldAsCardinal[]`, `TCSVRecord.FieldAsInt64[]` and `TCSVRecord.FieldAsUint64[]`:
+
+  The same as `TCSVRecord.Field[]` but data will be forcedly casted to an integer type. Thousand separators (as given in `TCSVRecord.FormatSettings`) are ignored.
+  Read-only. May raise an exception.
 
 - `TCSVRecord.AsText`:
 
