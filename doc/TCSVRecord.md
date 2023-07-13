@@ -191,7 +191,7 @@ These properties will determine the behavior of future calls to `TCSVRecord.Read
   - Date or time
   - Float number
   - Currency
-  - Signed and and unsigned integers
+  - Signed and unsigned integers
 
   For other data types, [`VarToStr`](https://www.freepascal.org/docs-html/rtl/variants/vartostr.html) is used.
 

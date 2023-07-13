@@ -16,7 +16,7 @@ var
   fs: TFormatSettings;
 
 begin
-  WriteLn('## Test of MaxRecordLength');
+  WriteLn('## Test of TCSVTableRecord');
   try
     WriteLn('== Test valid input');
 
